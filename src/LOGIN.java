@@ -46,6 +46,7 @@ public class LOGIN extends javax.swing.JFrame {
 
         jButton3.setBackground(new java.awt.Color(185, 230, 231));
         jButton3.setText("SIGN UP");
+        jButton3.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
         jPanel1.add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 390, 100, 40));
 
         jPasswordField1.setBackground(new java.awt.Color(155, 193, 250));
@@ -63,6 +64,7 @@ public class LOGIN extends javax.swing.JFrame {
 
         jButton2.setBackground(new java.awt.Color(185, 230, 231));
         jButton2.setText("LOGIN");
+        jButton2.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
         jPanel1.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(790, 390, 100, 40));
 
         jButton1.setBackground(new java.awt.Color(185, 230, 231));
@@ -79,7 +81,7 @@ public class LOGIN extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
-        // TODO add your handling code here:
+         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField1ActionPerformed
 
     /**

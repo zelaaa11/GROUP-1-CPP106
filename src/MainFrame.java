@@ -70,8 +70,6 @@ public class MainFrame extends javax.swing.JFrame {
         jPanel2.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 130, 150, 40));
 
         jLabel5.setIcon(new javax.swing.ImageIcon("C:\\Users\\aaron\\OneDrive\\Pictures\\Screenshots\\MAIN_DASHBOARD.png")); // NOI18N
-        jLabel5.setMaximumSize(new java.awt.Dimension(980, 489));
-        jLabel5.setMinimumSize(new java.awt.Dimension(980, 489));
         jPanel2.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, -1, 980, 490));
 
         getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(-10, 0, 990, 490));
