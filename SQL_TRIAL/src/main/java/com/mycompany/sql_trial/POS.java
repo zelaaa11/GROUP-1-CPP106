@@ -489,7 +489,7 @@ private double extractTotalFromReceipt() {
         payBillsFrame.setVisible(true);
 
         // Dispose of the POS frame temporarily (if needed)
-        this.setVisible(false); // Hide POS while PAY_BILLS is active
+       // this.setVisible(false); // Hide POS while PAY_BILLS is active
     } catch (Exception e) {
         JOptionPane.showMessageDialog(this, "Error retrieving total: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
     }

@@ -14,24 +14,22 @@ import java.awt.event.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.sql.*;
+import java.util.Locale.Category;
 
 
 public class ADD_MENU extends javax.swing.JFrame {
 
-    /**
-     * Creates new form ADD_MENU
-     */
+    private static final String DB_URL = "jdbc:mysql://localhost:3306/ultra";
+    private static final String DB_USER = "root";
+    private static final String DB_PASSWORD = "Password123!";
+    
     public ADD_MENU() {
         initComponents();
     }
     private void saveToDatabase(String category, String mealName, double mealPrice, String imagePath) {
-        String dbUrl = "jdbc:mysql://localhost:3306/ultra";
-        String dbUser = "root";
-        String dbPassword = "Password123!";
+    String insertQuery = "INSERT INTO ultra (category, mealName, mealPrice, imagePath) VALUES (?, ?, ?, ?)";
 
-        String insertQuery = "INSERT INTO ultra (category, mealName, mealPrice, imagePath) VALUES (?, ?, ?, ?)";
-
-        try (Connection conn = DriverManager.getConnection(dbUrl, dbUser, dbPassword);
+        try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
              PreparedStatement pstmt = conn.prepareStatement(insertQuery)) {
 
             pstmt.setString(1, category);
@@ -45,8 +43,12 @@ public class ADD_MENU extends javax.swing.JFrame {
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, "Database error: " + e.getMessage());
         }
+    
+    
+    
+    
+    
     }
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -69,8 +71,8 @@ public class ADD_MENU extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         CANCEL = new javax.swing.JButton();
         DONE = new javax.swing.JButton();
-        Category = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
+        Cate = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -184,14 +186,10 @@ public class ADD_MENU extends javax.swing.JFrame {
             }
         });
 
-        Category.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                CategoryActionPerformed(evt);
-            }
-        });
-
         jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel4.setText("category");
+
+        Cate.setText("jTextField1");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -216,8 +214,8 @@ public class ADD_MENU extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel4)
-                    .addComponent(Category, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(Cate, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4))
                 .addGap(110, 110, 110))
         );
         jPanel1Layout.setVerticalGroup(
@@ -227,9 +225,9 @@ public class ADD_MENU extends javax.swing.JFrame {
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(CREATE_MEAL_PANEL, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(Category, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(24, 24, 24)
+                .addComponent(Cate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 21, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -253,49 +251,46 @@ public class ADD_MENU extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void ADD_PHOTOActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ADD_PHOTOActionPerformed
-        JFileChooser chooser = new JFileChooser();
+          JFileChooser chooser = new JFileChooser();
         int option = chooser.showOpenDialog(null);
         if (option == JFileChooser.APPROVE_OPTION) {
             File file = chooser.getSelectedFile();
             String path = file.getAbsolutePath();
             Image image = Toolkit.getDefaultToolkit().createImage(path);
             image = image.getScaledInstance(ADD_PHOTO_JLABEL.getWidth(), ADD_PHOTO_JLABEL.getHeight(), Image.SCALE_SMOOTH);
-            ImageIcon ii = new ImageIcon(image);
-            ADD_PHOTO_JLABEL.setIcon(ii);
+            ADD_PHOTO_JLABEL.setIcon(new ImageIcon(image));
             ADD_PHOTO_JLABEL.setName(path);
         }
     }//GEN-LAST:event_ADD_PHOTOActionPerformed
 
     private void DONEActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DONEActionPerformed
-        String category = Category.getText();
-        String mealName = MEAL_NAME.getText();
-        String mealPrice = MEAL_PRICE.getText();
-        String imagePath = ADD_PHOTO_JLABEL.getName();
+     String category = (String) Cate.getText(); // Value from JComboBox
+        String mealName = MEAL_NAME.getText().trim(); // Trim to remove whitespace
+        String mealPrice = MEAL_PRICE.getText().trim(); // Trim to remove whitespace
+        String imagePath = ADD_PHOTO_JLABEL.getName(); // Get the image path
 
-        if (category.isEmpty() || mealName.isEmpty() || mealPrice.isEmpty() || imagePath == null) {
+        // Validation checks
+        if (category == null || mealName.isEmpty() || mealPrice.isEmpty() || imagePath == null) {
             JOptionPane.showMessageDialog(this, "Please fill all fields and upload an image.");
             return;
         }
 
         try {
+            // Convert meal price to double
             double mealprice = Double.parseDouble(mealPrice);
+
+            // Save to database
             saveToDatabase(category, mealName, mealprice, imagePath);
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(this, "Please enter a valid price.");
         }
-        
-        // Close current window
+
+        // Close current window and open POS JFrame
         setVisible(false);
 
-        // Open POS JFrame and refresh its content
         POS counterPosWindow = new POS();
-        //counterPosWindow.refreshMeals(); // Method to refresh meals in POS JFrame
         counterPosWindow.setVisible(true);
     }//GEN-LAST:event_DONEActionPerformed
-
-    private void CategoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CategoryActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_CategoryActionPerformed
 
     /**
      * @param args the command line arguments
@@ -338,7 +333,7 @@ public class ADD_MENU extends javax.swing.JFrame {
     private javax.swing.JPanel ADD_PHOTO_PANEL;
     private javax.swing.JButton CANCEL;
     private javax.swing.JPanel CREATE_MEAL_PANEL;
-    private javax.swing.JTextField Category;
+    private javax.swing.JTextField Cate;
     private javax.swing.JButton DONE;
     private javax.swing.JTextField MEAL_NAME;
     private javax.swing.JTextField MEAL_PRICE;
